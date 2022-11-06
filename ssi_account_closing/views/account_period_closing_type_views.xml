@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<record id="account_period_closing_type_view_search" model="ir.ui.view">
+    <field name="name">account.period_closing_type - search</field>
+    <field name="model">account.period_closing_type</field>
+    <field
+            name="inherit_id"
+            ref="ssi_master_data_mixin.mixin_master_data_view_search"
+        />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data />
+    </field>
+</record>
+
+<record id="account_period_closing_type_view_tree" model="ir.ui.view">
+    <field name="name">account.period_closing_type - tree</field>
+    <field name="model">account.period_closing_type</field>
+    <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_tree" />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data>
+        </data>
+    </field>
+</record>
+
+<record id="account_period_closing_type_view_form" model="ir.ui.view">
+    <field name="name">account.period_closing_type - form</field>
+    <field name="model">account.period_closing_type</field>
+    <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_form" />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='active']" position="after">
+                <field name="period_type_ids" widget="many2many_tags" />
+                <field name="journal_id" />
+            </xpath>
+            <xpath expr="//page[1]" position="before">
+                <page name="mapping" string="Mapping">
+                    <field name="mapping_ids">
+                        <tree>
+                            <field name="sequence" widget="handle" />
+                            <field name="name" />
+                        </tree>
+                        <form>
+                            <group name="mapping_form" colspan="4" col="2">
+                                <field name="sequence" />
+                                <field name="name" />
+                                <field name="python_computation" widget="ace" />
+                                <field
+                                        name="destination_account_domain"
+                                        colspan="2"
+                                        widget="domain"
+                                        options="{'model': 'account.account', 'in_dialog': True}"
+                                    />
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="account_period_closing_type_action" model="ir.actions.act_window">
+    <field name="name">Period Closing Types</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">account.period_closing_type</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem
+        id="account_period_closing_type_menu"
+        name="Period Closing Types"
+        parent="ssi_financial_accounting.menu_misc_configuration"
+        action="account_period_closing_type_action"
+        groups="period_closing_type_group"
+    />
+
+</odoo>
