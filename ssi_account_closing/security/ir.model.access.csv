@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_period_closing_type_configurator,account.period_closing_type - configurator,model_account_period_closing_type,period_closing_type_group,1,1,1,1
+access_period_closing_type_all,account.period_closing_type - all user,model_account_period_closing_type,,1,0,0,0
+access_period_closing_type_mapping_configurator,account.period_closing_type_mapping - configurator,model_account_period_closing_type_mapping,period_closing_type_group,1,1,1,1
+access_period_closing_type_mapping_all,account.period_closing_type_mapping - all user,model_account_period_closing_type_mapping,,1,0,0,0
+access_period_closing_all,account.period_closing - all user,model_account_period_closing,,1,0,0,0
+access_period_closing_viewer,account.period_closing - viewer,model_account_period_closing,period_closing_viewer_group,1,0,0,0
+access_period_closing_user,account.period_closing - user,model_account_period_closing,period_closing_user_group,1,1,1,1
+access_period_closing_mapping_all,account.period_closing_mapping - all user,model_account_period_closing_mapping,,1,0,0,0
+access_period_closing_mapping_viewer,account.period_closing_mapping - viewer,model_account_period_closing_mapping,period_closing_viewer_group,1,0,0,0
+access_period_closing_mapping_user,account.period_closing_mapping - user,model_account_period_closing_mapping,period_closing_user_group,1,1,1,1

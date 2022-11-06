@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+  <record id="account_period_closing_view_search" model="ir.ui.view">
+    <field name="name">account.period_closing - search</field>
+    <field name="model">account.period_closing</field>
+    <field
+            name="inherit_id"
+            ref="ssi_transaction_mixin.mixin_transaction_view_search"
+        />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data>
+
+        </data>
+    </field>
+</record>
+
+<record id="account_period_closing_view_tree" model="ir.ui.view">
+    <field name="name">account.period_closing -tree</field>
+    <field name="model">account.period_closing</field>
+    <field name="mode">primary</field>
+    <field name="inherit_id" ref="ssi_transaction_mixin.mixin_transaction_view_tree" />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="type_id" />
+                <field name="date" />
+                <field name="period_id" />
+                <field name="date_start" />
+                <field name="date_end" />
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="account_period_closing_view_form" model="ir.ui.view">
+    <field name="name">account.period_closing - form</field>
+    <field name="model">account.period_closing</field>
+    <field name="mode">primary</field>
+    <field name="inherit_id" ref="ssi_transaction_mixin.mixin_transaction_view_form" />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="type_id" />
+            </xpath>
+            <xpath expr="//group[@name='header_right']" position="inside">
+                <field
+                        name="allowed_period_ids"
+                        widget="many2many_tags"
+                        invisible="1"
+                    />
+                <field name="date" />
+                <field name="period_id" domain="[('id','in',allowed_period_ids)]" />
+                <field name="date_start" />
+                <field name="date_end" />
+            </xpath>
+            <xpath expr="//page[1]" position="before">
+                <page name="mapping" string="Mapping(s)">
+                    <field name="mapping_ids">
+                        <tree>
+                            <field name="sequence" widget="handle" />
+                            <field name="name" />
+                        </tree>
+                        <form>
+                            <group name="mapping_form" colspan="4" col="2">
+                                <field name="sequence" />
+                                <field name="name" />
+                                <field name="python_computation" widget="ace" />
+                                <field name="account_ids" widget="many2many_tags" />
+                            </group>
+                        </form>
+                    </field>
+                </page>
+                <page name="accounting" string="Accounting">
+                    <group name="accounting" colspan="4" col="2">
+                        <field name="journal_id" />
+                        <field name="move_id" />
+                    </group>
+                </page>
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="account_period_closing_action" model="ir.actions.act_window">
+    <field name="name">Period Closings</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">account.period_closing</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="account_period_closing_view_search" />
+</record>
+
+<menuitem
+        id="period_closing_menu"
+        name="Period Closings"
+        parent="ssi_financial_accounting.menu_periodic_processing"
+        groups="period_closing_viewer_group"
+        action="account_period_closing_action"
+    />
+</odoo>
