@@ -200,7 +200,7 @@ class AccountClosing(models.Model):
             self._prepare_account_move()
         )
 
-        move.action_post()
+        # move.action_post()
 
         self.write(
             {
