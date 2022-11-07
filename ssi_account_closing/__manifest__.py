@@ -4,7 +4,7 @@
 
 {
     "name": "Period Closing",
-    "version": "14.0.1.1.1",
+    "version": "14.0.1.1.2",
     "category": "Accounting",
     "website": "https://simetri-sinergi.id",
     "author": "OpenSynergy Indonesia, PT. Simetri Sinergi Indonesia",
