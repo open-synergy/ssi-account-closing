@@ -140,6 +140,12 @@ class AccountClosing(models.Model):
         string="Mapping(s)",
         comodel_name="account.period_closing_mapping",
         inverse_name="closing_id",
+        readonly=True,
+        states={
+            "draft": [
+                ("readonly", False),
+            ],
+        },
     )
     state = fields.Selection(
         string="State",
@@ -194,9 +200,6 @@ class AccountClosing(models.Model):
             self._prepare_account_move()
         )
 
-        for mapping in self.mapping_ids:
-            mapping._create_move_line(move)
-
         move.action_post()
 
         self.write(
@@ -207,10 +210,14 @@ class AccountClosing(models.Model):
 
     def _prepare_account_move(self):
         self.ensure_one()
+        lines = []
+        for mapping in self.mapping_ids:
+            lines += mapping._prepare_move_line()
         return {
             "name": self.name,
             "journal_id": self.journal_id.id,
             "date": self.date,
+            "line_ids": lines,
         }
 
     @api.onchange(
