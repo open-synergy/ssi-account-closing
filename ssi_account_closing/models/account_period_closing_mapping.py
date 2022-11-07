@@ -42,22 +42,23 @@ class AccountPeriodClosingMapping(models.Model):
         column2="account_id",
     )
 
-    def _create_move_line(self, move):
+    def _prepare_create_move_line(self, account, amount):
         self.ensure_one()
-        AML = self.env["account.move.line"].with_context(check_move_validity=False)
-        for account in self.account_ids:
-            AML.create(self._prepare_create_move_line(move, account))
-
-    def _prepare_create_move_line(self, move, account):
-        self.ensure_one()
-        amount = self._compute_amount(account)
         return {
             "name": self.name,
             "account_id": account.id,
             "debit": amount > 0 and abs(amount) or 0.0,
             "credit": amount < 0 and abs(amount) or 0.0,
-            "move_id": move.id,
         }
+
+    def _prepare_move_line(self):
+        self.ensure_one()
+        result = []
+        for account in self.account_ids:
+            amount = self._compute_amount(account)
+            if isinstance(amount, float):
+                result.append((0, 0, self._prepare_create_move_line(account, amount)))
+        return result
 
     def _compute_amount(self, account):
         self.ensure_one()
