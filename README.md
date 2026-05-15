@@ -14,7 +14,11 @@ None
 
 [//]: # (addons)
 
-This part will be replaced when running the oca-gen-addons-table script from OCA/maintainer-tools.
+Available addons
+----------------
+addon | version | maintainers | summary
+--- | --- | --- | ---
+[ssi_account_closing](ssi_account_closing/) | 14.0.1.1.2 |  | Period Closing
 
 [//]: # (end addons)
 
