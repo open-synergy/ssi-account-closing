@@ -1,0 +1,123 @@
+setup:
+  steps:
+    - step: "Create period closing type"
+      action: "create"
+      model: "account.period_closing_type"
+      save_as: "closing_type"
+      values:
+        name: "Test Closing Type"
+        code: "TESTCLOSETYPE"
+
+    - step: "Create journal"
+      action: "create"
+      model: "account.journal"
+      save_as: "journal"
+      values:
+        name: "Test Period Closing Journal"
+        code: "TPCJ"
+        type: "general"
+
+    - step: "Create date range type"
+      action: "create"
+      model: "date.range.type"
+      save_as: "period_type"
+      values:
+        name: "Test Period Type"
+
+    - step: "Create date range period"
+      action: "create"
+      model: "date.range"
+      save_as: "period"
+      values:
+        name: "Test Period 2024-01"
+        date_start: "2024-01-01"
+        date_end: "2024-01-31"
+        type_id: "REC: period_type.id"
+
+scenarios:
+  - name: "Account Period Closing - Operating Unit propagation"
+    steps:
+      - step: "Create period closing with operating_unit_id"
+        action: "create"
+        model: "account.period_closing"
+        save_as: "closing"
+        values:
+          date: "2024-01-15"
+          type_id: "REC: closing_type.id"
+          period_id: "REC: period.id"
+          journal_id: "REC: journal.id"
+          operating_unit_id: "REF: operating_unit.main_operating_unit"
+
+      - step: "Assert operating_unit_id is set"
+        action: "assert"
+        target: "closing"
+        asserts:
+          operating_unit_id:
+            type: "value"
+            operator: "is_truthy"
+
+  - name: "Account Period Closing - ir.rule restricts access by operating unit"
+    steps:
+      - step: "Create period closing with main operating unit"
+        action: "create"
+        model: "account.period_closing"
+        save_as: "closing"
+        values:
+          date: "2024-01-15"
+          type_id: "REC: closing_type.id"
+          period_id: "REC: period.id"
+          journal_id: "REC: journal.id"
+          operating_unit_id: "REF: operating_unit.main_operating_unit"
+
+      - step: "Create partner for second operating unit"
+        action: "create"
+        model: "res.partner"
+        save_as: "ou2_partner"
+        values:
+          name: "Test OU2 Partner"
+          is_company: true
+
+      - step: "Create second operating unit"
+        action: "create"
+        model: "operating.unit"
+        save_as: "ou2"
+        values:
+          name: "Test Operating Unit 2"
+          code: "TESTOU2"
+          partner_id: "REC: ou2_partner.id"
+
+      - step: "Create user restricted to second operating unit"
+        action: "create"
+        model: "res.users"
+        save_as: "restricted_user"
+        values:
+          name: "Restricted OU User"
+          login: "restricted_ou_user@example.com"
+          groups_id:
+            - - 6
+              - 0
+              - - "REF: base.group_user"
+                - "REF: ssi_account_closing.period_closing_user_group"
+                - "REF:
+                  ssi_account_closing_operating_unit.account_period_closing_ou_group"
+          assigned_operating_unit_ids:
+            - - 6
+              - 0
+              - - "REC: ou2.id"
+
+      - step: "Restricted user cannot see the record"
+        action: "search"
+        model: "account.period_closing"
+        domain: [["id", "=", "REC: closing.id"]]
+        save_as: "search_result"
+        as_user: "restricted_user"
+        expect_count: 0
+
+      - step: "Restricted user cannot write the record"
+        action: "write"
+        target: "closing"
+        as_user: "restricted_user"
+        expect_error:
+          type: "AccessError"
+        values:
+          date: "2024-02-01"
