@@ -13,7 +13,28 @@
     <field name="mode">primary</field>
     <field name="arch" type="xml">
         <data>
-
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="type_id" />
+                <field name="period_id" />
+                <field name="journal_id" />
+            </xpath>
+            <xpath expr="//filter[@name='grp_responsible']" position="after">
+                <filter
+                        name="grp_type"
+                        string="Type"
+                        context="{'group_by':'type_id'}"
+                    />
+                <filter
+                        name="grp_period"
+                        string="Period"
+                        context="{'group_by':'period_id'}"
+                    />
+                <filter
+                        name="grp_journal"
+                        string="Journal"
+                        context="{'group_by':'journal_id'}"
+                    />
+            </xpath>
         </data>
     </field>
 </record>
