@@ -1,42 +1,40 @@
-setup:
-  steps:
-    - step: "Create period closing type"
-      action: "create"
-      model: "account.period_closing_type"
-      save_as: "closing_type"
-      values:
-        name: "Test Closing Type"
-        code: "TESTCLOSETYPE"
-
-    - step: "Create journal"
-      action: "create"
-      model: "account.journal"
-      save_as: "journal"
-      values:
-        name: "Test Period Closing Journal"
-        code: "TPCJ"
-        type: "general"
-
-    - step: "Create date range type"
-      action: "create"
-      model: "date.range.type"
-      save_as: "period_type"
-      values:
-        name: "Test Period Type"
-
-    - step: "Create date range period"
-      action: "create"
-      model: "date.range"
-      save_as: "period"
-      values:
-        name: "Test Period 2024-01"
-        date_start: "2024-01-01"
-        date_end: "2024-01-31"
-        type_id: "REC: period_type.id"
-
 scenarios:
   - name: "Account Period Closing - Operating Unit propagation"
     steps:
+      - step: "Create period closing type"
+        action: "create"
+        model: "account.period_closing_type"
+        save_as: "closing_type"
+        values:
+          name: "Test Closing Type 1"
+          code: "TESTCLOSETYPE1"
+
+      - step: "Create journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test Period Closing Journal 1"
+          code: "TPCJ1"
+          type: "general"
+
+      - step: "Create date range type"
+        action: "create"
+        model: "date.range.type"
+        save_as: "period_type"
+        values:
+          name: "Test Period Type 1"
+
+      - step: "Create date range period"
+        action: "create"
+        model: "date.range"
+        save_as: "period"
+        values:
+          name: "Test Period 2024-01 (1)"
+          date_start: "2024-01-01"
+          date_end: "2024-01-31"
+          type_id: "REC: period_type.id"
+
       - step: "Create period closing with operating_unit_id"
         action: "create"
         model: "account.period_closing"
@@ -60,6 +58,40 @@ scenarios:
 
   - name: "Account Period Closing - ir.rule restricts access by operating unit"
     steps:
+      - step: "Create period closing type"
+        action: "create"
+        model: "account.period_closing_type"
+        save_as: "closing_type"
+        values:
+          name: "Test Closing Type 2"
+          code: "TESTCLOSETYPE2"
+
+      - step: "Create journal"
+        action: "create"
+        model: "account.journal"
+        save_as: "journal"
+        values:
+          name: "Test Period Closing Journal 2"
+          code: "TPCJ2"
+          type: "general"
+
+      - step: "Create date range type"
+        action: "create"
+        model: "date.range.type"
+        save_as: "period_type"
+        values:
+          name: "Test Period Type 2"
+
+      - step: "Create date range period"
+        action: "create"
+        model: "date.range"
+        save_as: "period"
+        values:
+          name: "Test Period 2024-01 (2)"
+          date_start: "2024-01-01"
+          date_end: "2024-01-31"
+          type_id: "REC: period_type.id"
+
       - step: "Create period closing with main operating unit"
         action: "create"
         model: "account.period_closing"
