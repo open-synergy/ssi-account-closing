@@ -19,6 +19,7 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [ssi_account_closing](ssi_account_closing/) | 14.0.1.1.2 |  | Period Closing
+[ssi_account_closing_operating_unit](ssi_account_closing_operating_unit/) | 14.0.1.0.0 |  | Period Closing + Operating Unit
 
 [//]: # (end addons)
 
